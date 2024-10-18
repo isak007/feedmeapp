@@ -1,0 +1,24 @@
+
+img:hover {
+    cursor: pointer;
+    
+}
+img:active { 
+    rotate: 30deg;
+}
+
+
+.toolbar-option:hover{
+    cursor: pointer;
+    color:green;
+}
+#username{
+    color: white;
+}
+
+#username:hover{
+    cursor: pointer;
+}
+p-element p-dropdown-label p-inputtext p-placeholder.p-inputtext{
+    color:white;
+}

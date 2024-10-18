@@ -1,0 +1,13 @@
+.cardInput{
+    height: 33px;
+    margin-bottom: 10px;
+}
+
+.creditCardImg{
+    width:60px;
+    height:37px;
+}
+
+:host ::ng-deep .creditCard{
+    border-radius: 15px;
+}

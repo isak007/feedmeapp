@@ -1,0 +1,42 @@
+<div class="form-group">
+    <div>
+        <b>
+            <label style="font-size: 15px;" for="password" >Address (optional)</label>
+        </b>
+        <br/>
+        <div style="display: flex;max-width: 100%;">
+            <div style="width: 100%;">
+                <p-autoComplete
+                    [readonly]="this.addressDisabled"
+                    (onSelect)="this.addressSelected($event.value)"
+                    name="address"
+                    scrollHeight="180px"
+                    inputId="addressInput"
+                    placeholder="Type for suggestions or use map"
+                    [(ngModel)]="selectedAddress" 
+                    [suggestions]="filteredAddresses" 
+                    (completeMethod)="filterAddress($event)">
+                    <ng-template let-address pTemplate="item">
+                        <div style="white-space: initial;word-wrap: break-word; display:flex; max-width:19.5rem" >
+                            <b><i class="pi pi-map-marker"></i>&nbsp;&nbsp;{{address.formatted}}</b><br/>
+                        </div>
+                    </ng-template>
+                </p-autoComplete>
+            </div>
+            <div>
+                <p-button id="mapsBtn"
+                    (onClick)="op.toggle($event)"
+                    styleClass="showHidePass" 
+                    icon="pi pi-map-marker" 
+                    [text]="true" 
+                    severity="secondary" />
+                <p-overlayPanel #op id="op">
+                    <div class="flex flex-column align-items-center w-full gap-3 border-bottom-1 surface-border p-3 mb-3">
+                        <app-google-map [addresses]="addresses" (addressesOutput)="updateAddresses($event)" [registerAs]="registerAs"></app-google-map>
+                    </div>
+                </p-overlayPanel>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="this.addressDisabled"><a href="" onclick="return false" (click)="resetAddress()" style="text-decoration: none;font-size: 12px;">Reset</a></div>
+</div>

@@ -1,0 +1,243 @@
+<p-button *ngIf="!isLoggedIn()"
+    class="username-button"
+    [style]="{
+    'background-color': 'linear-gradient(to right, var(--green-500), var(--green-800))',
+    'border':'none' }"
+    (onClick)="showLoginDialogue()">
+    Login / Register&nbsp;
+    <i class="pi pi-sign-in"></i>
+</p-button>
+<p-dialog 
+    dismissableMask ="true"
+    [header]="registerEnabled ? 'Registration' : 'Login'" 
+    [modal]="true" 
+    [(visible)]="visible" 
+    [style]="{ width: windowWidth }">
+    @if (passResetJwt){
+        <form #passwordResetForm="ngForm" (ngSubmit)="onPasswordReset()">
+            <div class="form-group">
+                <div>
+                    <b><label style="font-size: 15px;" for="newPassword" >New password</label></b><br/>
+                        @if (this.showPass){
+                            <input 
+                                required
+                                minlength="5"
+                                maxlength="20"
+                                [(ngModel)] = "newPassword"
+                                type="text" 
+                                style="height: 33px;" 
+                                pInputText 
+                                name="newPassword"
+                                class="form-control" 
+                                autocomplete="off" />
+                        } @else{
+                            <input 
+                                required
+                                minlength="5"
+                                maxlength="20"
+                                [(ngModel)] = "newPassword"
+                                type="password" 
+                                style="height: 33px;" 
+                                pInputText 
+                                name="newPassword"
+                                class="form-control" 
+                                autocomplete="off" />
+                        } 
+                </div>
+                <div style="margin-top:10px; margin-bottom: 10px;">
+                    <b><label style="font-size: 15px;" for="newConfirmedPassword" >Confirm password</label></b><br/>
+                        @if (this.showPass){
+                            <input 
+                                required
+                                minlength="5"
+                                [ngModelOptions]="{ updateOn:'change' }"
+                                [(ngModel)] = "newConfirmedPassword"
+                                type="text" 
+                                style="height: 33px;" 
+                                pInputText 
+                                name="newConfirmedPassword"
+                                class="form-control"
+                                autocomplete="off" />
+                            
+                        } @else{
+                            <input 
+                                required
+                                minlength="5"
+                                [ngModelOptions]="{ updateOn:'change' }"
+                                [(ngModel)] = "newConfirmedPassword"
+                                type="password" 
+                                style="height: 33px;" 
+                                pInputText 
+                                name="newConfirmedPassword"
+                                class="form-control"
+                                autocomplete="off" />
+                            
+                        }
+                </div>
+            </div>
+
+            <div *ngIf="passResetSendSuccessful && resultMsg" style="text-align: center; font-size: 15px;" class="alert alert-success">{{resultMsg}}</div>
+            <div *ngIf="!passResetSendSuccessful && resultMsg" style="text-align: center; font-size: 15px;" class="alert alert-danger">{{resultMsg}}</div>
+
+            <span style="font-size: 13px;" class="p-text-secondary block mb-5">
+                Go to 
+                <a style="text-decoration: none;"
+                href="" onclick="return false" (click)="this.swapPasswordReset()">
+                login
+                </a>
+            </span>
+            
+            <div *ngIf="!passResetSendSuccessful" style="text-align: right;">
+                <button  
+                    [disabled]="passwordResetForm.pristine || passwordResetForm.invalid || loading"
+                    type="submit"
+                    id="login-button"
+                    style="height: 33px;width: fit-content; margin-top: 10px;"
+                    pButton 
+                    pRipple 
+                    class="p-button-secondary">
+                    <b>Change</b>&nbsp;
+                    <i *ngIf="loading" class="pi pi-spin pi-spinner" style="font-size: 1rem"></i>
+                </button>
+            </div>
+        </form>
+    }
+    @else if (!registerEnabled && !passwordResetEnabled){
+        <form #loginForm="ngForm" (ngSubmit)="onLogin(loginForm)">
+            <div class="form-group">
+                <div style="margin-bottom: 10px">
+                    <b><label style="font-size: 15px;" for="email">Email</label></b><br/>
+                    <input 
+                        required
+                        [ngModelOptions]="{ updateOn:'change' }"
+                        #loginEmail="ngModel"
+                        [(ngModel)] = "loginCredentials.email"
+                        type="email" 
+                        style="height: 33px;" 
+                        pInputText 
+                        name="email"
+                        class="form-control" 
+                        autocomplete="off" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div style="margin-bottom: 10px;">
+                    <b><label style="font-size: 15px;" for="password" >Password</label></b><br/>
+                    <div style="display: flex;">
+                            @if (this.showPass){
+                                <input 
+                                    required
+                                    minlength="1"
+                                    [ngModelOptions]="{ updateOn:'blur' }"
+                                    #loginPassword="ngModel"
+                                    [(ngModel)] = "loginCredentials.password"
+                                    type="text" 
+                                    pInputText 
+                                    name="password"
+                                    class="form-control passInput" 
+                                    autocomplete="off" />
+                                <p-button 
+                                    (click)="this.showHidePass()"
+                                    styleClass="showHidePass" 
+                                    icon="pi pi-eye-slash" 
+                                    [text]="true" 
+                                    severity="secondary" />
+                            } @else {
+                                <input 
+                                    required
+                                    minlength="1"
+                                    [ngModelOptions]="{ updateOn:'change' }"
+                                    #loginPassword="ngModel"
+                                    [(ngModel)] = "loginCredentials.password"
+                                    type="password" 
+                                    pInputText 
+                                    name="password"
+                                    class="form-control passInput" 
+                                    autocomplete="off" />
+                                <p-button 
+                                    (click)="this.showHidePass()"
+                                    styleClass="showHidePass" 
+                                    icon="pi pi-eye" 
+                                    [text]="true" 
+                                    severity="secondary" />
+                            }      
+                    </div>
+                    <span style="font-size: 13px;" class="p-text-secondary block mb-5">
+                        <a style="text-decoration: none;"
+                         href="" onclick="return false" (click)="this.swapPasswordReset()">Forgot password?</a>
+                    </span>
+                </div>
+            </div>
+
+            <div style="text-align: center;" class="alert alert-danger" *ngIf="resultMsg">{{resultMsg}}</div>
+
+            <span #templ style="font-size: 13px;" class="p-text-secondary block mb-5">
+                <a style="text-decoration: none;"
+                 href="" onclick="return false" (click)="this.swapRegister()">Click here</a> to create an account
+            </span>
+            
+            <div style="text-align: right;">
+                <button  
+                    [disabled]="loginForm.pristine || loginForm.invalid || loading"
+                    type="submit"
+                    id="login-button"
+                    style="height: 33px;width: fit-content; margin-top: 10px;"
+                    pButton 
+                    pRipple 
+                    class="p-button-secondary">
+                    <b>Log in</b>&nbsp;
+                    <i *ngIf="loading" class="pi pi-spin pi-spinner" style="font-size: 1rem"></i>
+                </button>
+            </div>
+        </form>
+    } @else if (!registerEnabled && passwordResetEnabled){
+        <form #passwordResetForm="ngForm" (ngSubmit)="onPasswordReset()">
+            <div class="form-group">
+                <div style="margin-bottom: 10px">
+                    <b><label for="passwordResetEmail" style="padding:5px;font-size:13px">Enter an email where you'll receive a link for password reset</label></b><br/>
+                    <input 
+                        required
+                        email
+                        [ngModelOptions]="{ updateOn:'change' }"
+                        #loginEmail="ngModel"
+                        [(ngModel)] = "passwordResetEmail"
+                        type="email" 
+                        style="height: 33px;" 
+                        pInputText 
+                        name="passwordResetEmail"
+                        class="form-control"
+                        placeholder="Email"
+                        autocomplete="off" />
+                </div>
+            </div>
+
+            <div *ngIf="passResetSendSuccessful && resultMsg" style="text-align: center; font-size: 15px;" class="alert alert-success">{{resultMsg}}</div>
+            <div *ngIf="!passResetSendSuccessful && resultMsg" style="text-align: center; font-size: 15px;" class="alert alert-danger">{{resultMsg}}</div>
+
+            <span style="font-size: 13px;" class="p-text-secondary block mb-5">
+                Go to 
+                <a style="text-decoration: none;"
+                href="" onclick="return false" (click)="this.swapPasswordReset()">
+                login
+                </a>
+            </span>
+            
+            <div *ngIf="!passResetSendSuccessful" style="text-align: right;">
+                <button  
+                    [disabled]="passwordResetForm.pristine || passwordResetForm.invalid || loading"
+                    type="submit"
+                    id="login-button"
+                    style="height: 33px;width: fit-content; margin-top: 10px;"
+                    pButton 
+                    pRipple 
+                    class="p-button-secondary">
+                    <b>Send</b>&nbsp;
+                    <i *ngIf="loading" class="pi pi-spin pi-spinner" style="font-size: 1rem"></i>
+                </button>
+            </div>
+        </form>
+
+    } @else {
+        <app-register (windowWidth)="resizeWindow()" (registerEnabled)="swapRegister()"></app-register>
+    }
+</p-dialog>

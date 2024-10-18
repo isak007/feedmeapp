@@ -1,0 +1,445 @@
+<div class="container">
+    <mat-accordion class="example-headers-align">
+        <mat-expansion-panel [disabled]="loading">
+            <mat-expansion-panel-header>
+                <mat-panel-title> First and last name </mat-panel-title>
+                <mat-panel-description>{{user.firstName}}&nbsp;{{user.lastName}}</mat-panel-description>                
+            </mat-expansion-panel-header>
+            <form #editFirstLastName="ngForm" (ngSubmit)="onEditData('firstLastName')">
+                <div class="form-group">
+                    <div style="margin-bottom: 10px;display:flex">
+                        <span style="width:200px">
+                            <input 
+                                required
+                                [(ngModel)] = "editedData.firstName"
+                                type="text" 
+                                style="height: 33px;" 
+                                pInputText 
+                                placeholder="First name"
+                                name="firstName"
+                                class="form-control" 
+                                autocomplete="off" />
+                        </span>
+                        &nbsp;&nbsp;&nbsp;
+                        <span style="width:200px">
+                            <input 
+                                required
+                                [(ngModel)] = "editedData.lastName"
+                                type="text" 
+                                style="height: 33px;" 
+                                pInputText 
+                                placeholder="Last name"
+                                name="lastName"
+                                class="form-control" 
+                                autocomplete="off" />
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <button  
+                        [disabled]="
+                        (this.editedData.firstName == this.user.firstName && this.editedData.lastName == this.user.lastName)
+                         || editFirstLastName.pristine 
+                         || editFirstLastName.invalid 
+                         || loading"
+                        type="submit"
+                        style="height: 33px;width: fit-content;"
+                        pButton 
+                        pRipple
+                        class="p-button-secondary">
+                        <b>Save changes</b>&nbsp;
+                        <i *ngIf="loading" class="pi pi-spin pi-spinner" style="font-size: 1rem"></i>
+                    </button>
+                </div>
+            </form>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel [disabled]="loading">
+            <mat-expansion-panel-header>
+                <mat-panel-title> Email </mat-panel-title>
+                <mat-panel-description>{{user.email}}</mat-panel-description>                
+            </mat-expansion-panel-header>
+            <form #editEmailPass="ngForm" (ngSubmit)="onEditData('email')">
+                <div class="form-group">
+                    <div style="display:flex;margin-bottom: 10px;">
+                        <span style="width:350px">
+                            <input 
+                                required
+                                email
+                                [(ngModel)] = "editedData.email"
+                                type="text" 
+                                style="height: 33px;" 
+                                pInputText 
+                                placeholder="Email"
+                                name="email"
+                                class="form-control" 
+                                autocomplete="off" />
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <button  
+                        [disabled]="this.editedData.email == this.user.email || editEmailPass.pristine || editEmailPass.invalid || loading"
+                        type="submit"
+                        id="login-button"
+                        style="height: 33px;width: fit-content;"
+                        pButton 
+                        pRipple
+                        class="p-button-secondary">
+                        <b>Save changes</b>&nbsp;
+                        <i *ngIf="loading" class="pi pi-spin pi-spinner" style="font-size: 1rem"></i>
+                    </button>
+                </div>
+            </form>
+        </mat-expansion-panel>
+        <mat-expansion-panel [disabled]="loading">
+            <mat-expansion-panel-header>
+                <mat-panel-title> Change password </mat-panel-title>
+                <mat-panel-description>********</mat-panel-description>                
+            </mat-expansion-panel-header>
+            <form #editPass="ngForm" (ngSubmit)="onEditData('password', editPass)">
+                <div class="form-group" style="width: 300px;">
+                    <div style="margin-bottom: 10px;">
+                        <div style="display: flex;">
+                                @if (this.showPass){
+                                    <input 
+                                        required
+                                        minlength="5"
+                                        [(ngModel)]="editedData.password"
+                                        type="text" 
+                                        pInputText
+                                        placeholder="Old password"
+                                        name="password"
+                                        class="form-control passInput" 
+                                        autocomplete="off" />
+                                    <p-button 
+                                        (click)="this.showPass = false"
+                                        styleClass="showHidePass" 
+                                        icon="pi pi-eye-slash" 
+                                        [text]="true" 
+                                        severity="secondary" />
+                                } @else {
+                                    <input 
+                                        required
+                                        minlength="5"
+                                        [(ngModel)]="editedData.password"
+                                        type="password" 
+                                        pInputText
+                                        placeholder="Old password"
+                                        name="password"
+                                        class="form-control passInput" 
+                                        autocomplete="off" />
+                                    <p-button 
+                                        (click)="this.showPass=true"
+                                        styleClass="showHidePass" 
+                                        icon="pi pi-eye" 
+                                        [text]="true" 
+                                        severity="secondary" />
+                                }      
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <div style="display: flex;">
+                                @if (this.showNewPass){
+                                    <input 
+                                        required
+                                        minlength="5"
+                                        [(ngModel)]="editedData.newPassword"
+                                        type="text" 
+                                        pInputText
+                                        placeholder="New password"
+                                        name="newPassword"
+                                        class="form-control passInput" 
+                                        autocomplete="off" />
+                                    <p-button 
+                                        (click)="this.showNewPass = false"
+                                        styleClass="showHidePass" 
+                                        icon="pi pi-eye-slash" 
+                                        [text]="true" 
+                                        severity="secondary" />
+                                } @else {
+                                    <input 
+                                        required
+                                        minlength="5"
+                                        [(ngModel)]="editedData.newPassword"
+                                        type="password" 
+                                        pInputText
+                                        placeholder="New password"
+                                        name="newPassword"
+                                        class="form-control passInput" 
+                                        autocomplete="off" />
+                                    <p-button 
+                                        (click)="this.showNewPass=true"
+                                        styleClass="showHidePass" 
+                                        icon="pi pi-eye" 
+                                        [text]="true" 
+                                        severity="secondary" />
+                                }      
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <div style="display: flex;">
+                                @if (this.showNewConfirmedPass){
+                                    <input 
+                                        required
+                                        minlength="5"
+                                        [(ngModel)]="editedData.newConfirmedPassword"
+                                        type="text" 
+                                        pInputText
+                                        placeholder="Old password"
+                                        name="newConfirmedPassword"
+                                        class="form-control passInput" 
+                                        autocomplete="off" />
+                                    <p-button 
+                                        (click)="this.showNewConfirmedPass = false"
+                                        styleClass="showHidePass" 
+                                        icon="pi pi-eye-slash" 
+                                        [text]="true" 
+                                        severity="secondary" />
+                                } @else {
+                                    <input 
+                                        required
+                                        minlength="5"
+                                        [(ngModel)]="editedData.newConfirmedPassword"
+                                        type="password" 
+                                        pInputText
+                                        placeholder="Confirm new password"
+                                        name="newConfirmedPassword"
+                                        class="form-control passInput" 
+                                        autocomplete="off" />
+                                    <p-button 
+                                        (click)="this.showNewConfirmedPass=true"
+                                        styleClass="showHidePass" 
+                                        icon="pi pi-eye" 
+                                        [text]="true" 
+                                        severity="secondary" />
+                                }      
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button  
+                        [disabled]="editPass.pristine 
+                        || editPass.invalid 
+                        || loading"
+                        type="submit"
+                        id="login-button"
+                        style="height: 33px;width: fit-content;"
+                        pButton 
+                        pRipple
+                        class="p-button-secondary">
+                        <b>Save changes</b>&nbsp;
+                        <i *ngIf="loading" class="pi pi-spin pi-spinner" style="font-size: 1rem"></i>
+                    </button>
+                </div>
+            </form>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel [disabled]="loading">
+            <mat-expansion-panel-header>
+                <mat-panel-title> Phone number </mat-panel-title>
+                <mat-panel-description> {{user.phoneNumber}} </mat-panel-description>                
+            </mat-expansion-panel-header>
+            <form #editPhoneNumber="ngForm" (ngSubmit)="onEditData('phoneNumber', editPhoneNumber)">
+                <div class="form-group">
+                    <div style="display:flex;margin-bottom: 50px;max-height: 300px;">
+                        <span style="width:300px">
+                            <!-- <b><label style="font-size: 15px;" for="password" >First name</label></b><br/> -->
+                            <ngx-intl-tel-input
+                                required
+                                cssClass="p-component p-element p-inputtext"
+                                [preferredCountries]="preferredCountries"
+                                [enableAutoCountrySelect]="true"
+                                [enablePlaceholder]="true"
+                                [searchCountryFlag]="true"
+                                [searchCountryField]="[
+                                SearchCountryField.Iso2,
+                                SearchCountryField.Name
+                                ]"
+                                [selectFirstCountry]="false"
+                                [selectedCountryISO]="CountryISO.UnitedStates"
+                                [maxLength]="15"
+                                [phoneValidation]="true"
+                                [separateDialCode]="separateDialCode"
+                                [numberFormat]="PhoneNumberFormat.National"
+                                [(ngModel)]="editedData.phoneNumberObject"
+                                name="phoneNumber"
+                                inputId="phoneNumber"
+                            ></ngx-intl-tel-input>
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <button  
+                        [disabled]="
+                        editPhoneNumber.pristine 
+                        || (editedData.phoneNumberObject != null && editedData.phoneNumberObject.internationalNumber == this.user.phoneNumber)
+                        || editPhoneNumber.invalid 
+                        || loading"
+                        type="submit"
+                        id="login-button"
+                        style="height: 33px;width: fit-content;"
+                        pButton 
+                        pRipple
+                        class="p-button-secondary">
+                        <b>Save changes</b>&nbsp;
+                        <i *ngIf="loading" class="pi pi-spin pi-spinner" style="font-size: 1rem"></i>
+                    </button>
+                </div>
+            </form>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel [disabled]="loading">
+            <mat-expansion-panel-header>
+                <mat-panel-title> Address </mat-panel-title>
+                <mat-panel-description> {{'address'}} </mat-panel-description>                
+            </mat-expansion-panel-header>
+            <form #editAddress="ngForm" (ngSubmit)="onEditData('address')" style="width: 550px;">
+                <div style="height:230px">
+                    <app-address (addressesOutput)="addAddresses($event)" [addresses]="editedData.addresses" [registerAs]="role"></app-address>
+                    @if(role=='vendor' && editedData.addresses.length > 0){
+                        <div class="form-group" id="addresses">
+                            <div *ngFor="let address of editedData.addresses; let i = index">
+                                <div style="display:flex">
+                                    <div style="width:93%">
+                                        <i style='color:rgb(216, 0, 0);' class="pi pi-map-marker"></i>
+                                        {{ address.formatted }}
+                                    </div>
+                                    <div style="margin-left:5px;text-align: right;justify-content: right;"><i (click)="removeAddress(i)" class="pi pi-ban rmvAddressBtn"></i></div>
+                                </div>
+                                <hr *ngIf="editedData.addresses.length > 1  && i != editedData.addresses.length-1" class="border-top-1 border-none surface-border" />
+                            </div>
+                        </div>
+                    }
+                    @if(role=='vendor'){
+                        <div style="margin-top:5px;font-size: 12px">*You can add mutliple addresses as a vendor</div>
+                    } 
+                </div>
+
+                <div>
+                    <button  
+                        [disabled]="loading"
+                        type="submit"
+                        id="login-button"
+                        style="height: 33px;width: fit-content;margin-top:10px"
+                        pButton 
+                        pRipple
+                        class="p-button-secondary">
+                        <b>Save changes</b>&nbsp;
+                        <i *ngIf="loading" class="pi pi-spin pi-spinner" style="font-size: 1rem"></i>
+                    </button>
+                </div>
+            </form>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel *ngIf="role == 'vendor'" [disabled]="loading">
+            <mat-expansion-panel-header>
+                <mat-panel-title> Business information </mat-panel-title>
+                <mat-panel-description> {{vendor.companyName}} </mat-panel-description>                
+            </mat-expansion-panel-header>
+            <form #editBusinessInfo="ngForm" (ngSubmit)="onEditData('businessInfo')">
+                <div class="form-group">
+                    <div style="margin-bottom: 10px;display:flex">
+                        <span style="width:300px">
+                            <b><label style="font-size: 15px;" for="companyName" >Company name</label></b><br/>
+                            <input 
+                                required
+                                type="text"
+                                [(ngModel)]="editedData.companyName"
+                                style="height: 33px;" 
+                                pInputText 
+                                placeholder="Company name"
+                                name="companyName"
+                                class="form-control" 
+                                autocomplete="off" />
+                        </span>
+                        &nbsp;&nbsp;&nbsp;
+                        <span style="width:300px">
+                            <b><label style="font-size: 15px;" for="taxId" >Tax I.D.</label></b><br/>
+                            <input 
+                                required
+                                type="text"
+                                [(ngModel)]="editedData.taxId"
+                                style="height: 33px;" 
+                                pInputText 
+                                placeholder="Tax I.D."
+                                name="taxId"
+                                class="form-control" 
+                                autocomplete="off" />
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <button  
+                        [disabled]="
+                        (this.editedData.companyName == this.vendor.companyName && this.editedData.taxId == this.vendor.taxId)
+                        || editBusinessInfo.pristine 
+                        || editBusinessInfo.invalid 
+                        || loading"
+                        type="submit"
+                        id="login-button"
+                        style="height: 33px;width: fit-content;"
+                        pButton 
+                        pRipple
+                        class="p-button-secondary">
+                        <b>Save changes</b>&nbsp;
+                        <i *ngIf="loading" class="pi pi-spin pi-spinner" style="font-size: 1rem"></i>
+                    </button>
+                </div>
+            </form>
+        </mat-expansion-panel>
+        <mat-expansion-panel [disabled]="loading">
+            <mat-expansion-panel-header>
+                <mat-panel-title> Payment method </mat-panel-title>
+                <mat-panel-description *ngIf="this.user.paymentMethod == 'credit-card'">
+                    Credit card &nbsp; ****{{user.creditCardDTO.cardNumber.slice(user.creditCardDTO.cardNumber.length-4,user.creditCardDTO.cardNumber.length)}}
+                </mat-panel-description>
+                <mat-panel-description *ngIf="this.user.paymentMethod == 'cash'">
+                    Cash
+                </mat-panel-description>              
+            </mat-expansion-panel-header>
+            <div class="flex flex-wrap gap-3" >
+                <div class="flex align-items-center" >
+                    <p-radioButton 
+                        name="cash" 
+                        value="cash" 
+                        [(ngModel)]="editedData.paymentMethod" 
+                        inputId="cash" />
+                    <label for="cash" class="ml-2">
+                        &nbsp;
+                        <b>Cash</b>
+                    </label>
+                    <br/>
+                    <p-radioButton 
+                        name="creditCard" 
+                        value="credit-card" 
+                        [(ngModel)]="editedData.paymentMethod" 
+                        inputId="creditCard" />
+                    <label for="creditCard" class="ml-2">
+                        &nbsp;
+                        <b>Credit card</b>
+                    </label>
+                </div>
+                <br/>
+                <div>
+                    <button  
+                        [disabled]="!this.validPaymentMethod() || loading"
+                        (click)="this.onEditData('paymentMethod')"
+                        id="login-button"
+                        style="height: 33px"
+                        pButton 
+                        pRipple
+                        class="p-button-secondary">
+                        <b>Update payment method</b>&nbsp;
+                        <i *ngIf="loading" class="pi pi-spin pi-spinner" style="font-size: 1rem"></i>
+                    </button>
+                </div>
+
+            </div>
+            @if(this.editedData.paymentMethod=='credit-card'){
+                <br/>
+                <app-credit-card-input [(creditCardDto)]="user.creditCardDTO"></app-credit-card-input>
+            } 
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>

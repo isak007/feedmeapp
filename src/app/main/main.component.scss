@@ -1,0 +1,61 @@
+#vendor-card{
+    width:33%;
+    border-radius:0;
+}
+
+@keyframes animForward {
+    0%   {left:0px; top:0px;}
+    100% {left:1920px; top:0px;}
+}
+
+@keyframes animBack {
+    0%   {right:0px; top:0px;}
+    100% {right:1920px; top:0px;}
+}
+
+.paginatorForwardAnim{
+    animation-name: animForward;
+    animation-duration: 0.5s;
+}
+
+.paginatorBackAnim{
+    animation-name: animBack;
+    animation-duration: 0.5s;
+}
+
+#container{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+    overflow-x: hidden;
+}
+
+:host ::ng-deep .pageChange{
+    background-color: rgba(0,0,0,0);
+}
+
+
+:host ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page.p-highlight{
+    color: black;
+    background-color: rgba(255,255,255,0.2);
+}
+:host ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page.p-highlight:hover{
+    cursor:initial
+}
+
+:host ::ng-deep .vendor-card{
+    margin:0;
+    padding:0;
+    margin-bottom:0;
+}
+
+:host ::ng-deep .vendor-card:hover{
+    cursor:pointer;
+}
+
+:host ::ng-deep .p-card-subheader{
+    font-size: 13px;
+    background-color: black;
+}

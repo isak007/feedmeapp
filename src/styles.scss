@@ -1,1 +1,64 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { 
+  height: 100%;
+  background-image: url('./assets/background.png');
+}
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Importing Bootstrap SCSS file. */
+@layer bootstrap, primeng;
+@import "bootstrap/scss/bootstrap.scss" layer(bootstrap);
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
+
+*::-webkit-scrollbar {
+    height: 7px;
+    width: 7px;
+  }
+  *::-webkit-scrollbar-track {
+    border-radius: 5px;
+    background-color: #FFFFFF;
+  }
+  
+  *::-webkit-scrollbar-track:hover {
+    background-color: #FFFFFF;
+  }
+  
+  *::-webkit-scrollbar-track:active {
+    background-color: #FFFFFF;
+  }
+  
+  *::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #E7E7E7;
+  }
+  
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: #9A9A9A;
+  }
+  
+  *::-webkit-scrollbar-thumb:active {
+    background-color: #9A9A9A;
+  }
+
+  *::-webkit-scrollbar {
+    overflow: hidden;
+  }
+
+
+.acceptButtonMaps{
+  height: 30px;
+}
+
+.p-confirm-popup-content{
+  padding:5px;
+  padding-bottom: 0;
+}
+
+.p-confirm-popup-footer{
+  padding-top:0;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

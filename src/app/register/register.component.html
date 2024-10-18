@@ -1,0 +1,273 @@
+<form *ngIf="!registered" #registerForm="ngForm" (ngSubmit)="onRegister(registerForm)">
+    
+    <p-selectButton
+        styleClass="selectButton"
+        [options]="stateOptions"
+        [(ngModel)]="registration.registerAs"
+        name="registerAs"
+        allowEmpty="false"
+        optionLabel="label"
+        optionValue="value"/>
+
+    <br/>
+
+    <div class="form-group">
+        <div style="margin-bottom: 10px;display:flex">
+            <span style="width:50%">
+                <b><label style="font-size: 15px;" for="password" >First name</label></b><br/>
+                <input 
+                    required
+                    #firstName="ngModel"
+                    [(ngModel)] = "registration.firstName"
+                    type="text" 
+                    style="height: 33px;" 
+                    pInputText 
+                    name="firstName"
+                    class="form-control" 
+                    autocomplete="off" />
+            </span>
+            &nbsp;&nbsp;
+            <span style="width:50%">
+                <b><label style="font-size: 15px;" for="lastName" >Last name</label></b><br/>
+                <input 
+                    required
+                    #lastName="ngModel"
+                    [(ngModel)] = "registration.lastName"
+                    type="text" 
+                    style="height: 33px;" 
+                    pInputText 
+                    name="lastName"
+                    class="form-control" 
+                    autocomplete="off" />
+            </span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div style="margin-bottom: 10px;display:flex">
+            <span style="width:50%">
+                <b><label style="font-size: 15px;" for="phoneNumber">Phone number</label></b><br/>
+                <ngx-intl-tel-input
+                    required
+                    cssClass="p-component p-element p-inputtext"
+                    [preferredCountries]="preferredCountries"
+                    [enableAutoCountrySelect]="true"
+                    [enablePlaceholder]="true"
+                    [searchCountryFlag]="true"
+                    [searchCountryField]="[
+                    SearchCountryField.Iso2,
+                    SearchCountryField.Name
+                    ]"
+                    [selectFirstCountry]="false"
+                    [selectedCountryISO]="CountryISO.UnitedStates"
+                    [maxLength]="15"
+                    [phoneValidation]="true"
+                    [separateDialCode]="separateDialCode"
+                    [numberFormat]="PhoneNumberFormat.National"
+                    [(ngModel)]="registration.phoneNumberObject"
+                    name="phoneNumber"
+                    inputId="phoneNumber"
+                ></ngx-intl-tel-input>
+            </span>
+            &nbsp;&nbsp;
+            <span style="width:50%">
+                <b><label style="font-size: 15px;" for="email" >Email</label></b><br/>
+                <input 
+                    required
+                    email
+                    #email="ngModel"
+                    [(ngModel)] = "registration.email"
+                    type="email" 
+                    style="height: 33px;" 
+                    pInputText
+                    name="email"
+                    class="form-control" 
+                    autocomplete="off" />
+            </span>
+        </div>
+    </div>
+    
+    <div class="form-group" *ngIf="registration.registerAs=='vendor'">
+        <div style="margin-bottom: 10px;display:flex">
+            <span style="width:50%">
+                <b><label style="font-size: 15px;" for="companyName" >Business information</label></b><br/>
+                <input 
+                    required
+                    minlength="1"
+                    #companyName="ngModel"
+                    [(ngModel)] = "registration.companyName"
+                    type="text"
+                    placeholder="Company name"
+                    style="height: 33px;" 
+                    pInputText 
+                    name="companyName"
+                    class="form-control" 
+                    autocomplete="off" />
+            </span>
+            &nbsp;&nbsp;
+            <span style="width:50%">
+                <b><label style="font-size: 15px;" for="taxId" >&nbsp;</label></b><br/>
+                <input 
+                    required
+                    minlength="5"
+                    [ngModelOptions]="{ updateOn:'change' }"
+                    #taxId="ngModel"
+                    [(ngModel)] = "registration.taxId"
+                    type="text" 
+                    placeholder="Tax I.D."
+                    style="height: 33px;" 
+                    pInputText 
+                    name="taxId"
+                    class="form-control"
+                    autocomplete="off" />
+            </span>
+        </div>
+    </div>
+
+    <app-address [addresses]="addresses" [registerAs]="registration.registerAs" (addressesOutput)="addAddresses($event)"></app-address>
+    @if(registration.registerAs=='vendor' && addresses.length > 0){
+        <div class="form-group" id="addresses">
+            <div *ngFor="let address of addresses; let i = index">
+                <div style="display:flex">
+                    <div style="width:93%">
+                        <i style='color:rgb(216, 0, 0);' class="pi pi-map-marker"></i>
+                        {{ address.formatted }}
+                    </div>
+                    <div style="margin-left:5px;text-align: right;justify-content: right;"><i (click)="removeAddress(i)" class="pi pi-ban rmvAddressBtn"></i></div>
+                </div>
+                <hr *ngIf="addresses.length > 1  && i != addresses.length-1" class="border-top-1 border-none surface-border" />
+            </div>
+        </div>
+    }
+    @if(registration.registerAs=='vendor'){
+        <div style="margin-top:5px;font-size: 12px">*You can add mutliple addresses as a vendor</div>
+    } 
+
+    <div class="form-group" style="margin-top: 10px;">
+        <div style="margin-bottom: 10px;display:flex">
+            <div>
+                <b><label style="font-size: 15px;" for="password" >Password</label></b><br/>
+                <div style="display: flex;">
+                    @if (this.showPass){
+                        <input 
+                            required
+                            minlength="5"
+                            maxlength="20"
+                            #password="ngModel"
+                            [(ngModel)] = "registration.password"
+                            type="text" 
+                            pInputText 
+                            name="password"
+                            class="form-control passInput"
+                            autocomplete="off" />
+                        <p-button 
+                            (click)="this.showHidePass()"
+                            styleClass="showHidePass" 
+                            icon="pi pi-eye-slash" 
+                            [text]="true" 
+                            severity="secondary" />
+                    } @else{
+                        <input 
+                            required
+                            minlength="5"
+                            maxlength="20"
+                            #password="ngModel"
+                            [(ngModel)] = "registration.password"
+                            type="password" 
+                            pInputText 
+                            name="password"
+                            class="form-control passInput" 
+                            autocomplete="off" />
+                        <p-button 
+                            (click)="this.showHidePass()"
+                            styleClass="showHidePass" 
+                            icon="pi pi-eye" 
+                            [text]="true" 
+                            severity="secondary" />
+                    } 
+                </div>
+            </div>
+            &nbsp;&nbsp;
+            <div>
+                <b><label style="font-size: 15px;" for="confirmPassword" >Confirm password</label></b><br/>
+                <div style="display: flex;">
+                    @if (this.showConfirmPass){
+                        <input 
+                            required
+                            minlength="5"
+                            [ngModelOptions]="{ updateOn:'change' }"
+                            #confirmPassword="ngModel"
+                            [(ngModel)] = "confirmPasswordValue"
+                            type="text" 
+                            style="height: 33px;" 
+                            pInputText 
+                            name="confirmPassword"
+                            class="form-control passInput"
+                            autocomplete="off" />
+                        <p-button 
+                            (click)="this.showHideConfirmPass()"
+                            styleClass="showHidePass" 
+                            icon="pi pi-eye-slash" 
+                            [text]="true" 
+                            severity="secondary" />
+                    } @else{
+                        <input 
+                            required
+                            minlength="5"
+                            [ngModelOptions]="{ updateOn:'change' }"
+                            #confirmPassword="ngModel"
+                            [(ngModel)] = "confirmPasswordValue"
+                            type="password" 
+                            pInputText 
+                            name="confirmPassword"
+                            class="form-control passInput"
+                            autocomplete="off" />
+                        <p-button 
+                            (click)="this.showHideConfirmPass()"
+                            styleClass="showHidePass" 
+                            icon="pi pi-eye" 
+                            [text]="true" 
+                            severity="secondary" />
+                        
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="text-align: center;" class="alert alert-danger" *ngIf="resultMsg">{{resultMsg}}</div>
+
+    <span style="font-size: 13px;" class="p-text-secondary block mb-5">
+        Go to 
+        <a style="text-decoration: none;"
+        href="" onclick="return false" (click)="switchToLogin()">
+        login
+        </a>
+    </span>
+    
+    <div style="text-align: right;">
+        <button  
+            [disabled]="registerForm.pristine || registerForm.invalid || loading"
+            type="submit"
+            id="login-button"
+            style="height: 33px;width: fit-content;"
+            pButton 
+            pRipple
+            class="p-button-secondary">
+            <b>Register</b>&nbsp;
+            <i *ngIf="loading" class="pi pi-spin pi-spinner" style="font-size: 1rem"></i>
+        </button>
+    </div>
+</form>
+
+<div *ngIf="registered">
+    <div style="text-align: center;" class="alert alert-success">
+        Email with an activation link has been sent to <b>{{registeredEmail}}</b>
+    </div>
+    <span style="font-size: 13px;" class="p-text-secondary block mb-5">
+        Go to 
+        <a style="text-decoration: none;"
+        href="" onclick="return false" (click)="switchToLogin()">
+        login
+        </a>
+    </span>
+</div>

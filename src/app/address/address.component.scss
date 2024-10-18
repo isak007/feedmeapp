@@ -1,0 +1,24 @@
+:host ::ng-deep .p-button-sm{
+    height: 33px !important;
+}
+
+.buttonStyle{
+    height: 33px !important;
+}
+
+:host ::ng-deep .p-autocomplete {
+    width:100%;
+}
+
+:host ::ng-deep .p-confirm-popup {
+    margin:0;
+    padding:0;
+    background-color: black;
+}
+
+:host ::ng-deep #addressInput{
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    min-width: 100%;
+    height:33px;
+}

@@ -1,0 +1,14 @@
+:host ::ng-deep .showHidePass{
+    height: 33px;
+    width:33px;
+    border: 1px solid #d1d5db;
+    border-left:none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.passInput{
+    height:33px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}

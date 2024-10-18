@@ -1,0 +1,39 @@
+<div class="container" style="padding:50px;width:fit-content">
+    
+    <div 
+        *ngIf="message && successful"
+        class="alert alert-success"
+        >
+        {{ message }}
+    </div>
+    <div 
+        *ngIf="message && !successful"
+        class="alert alert-danger"
+        >
+        {{ message }}
+    </div>
+
+    <div *ngIf="loading">
+        <p>
+            <strong>Wait while we activate your account...</strong>
+        </p>
+        <button style="border:none;background-color: rgb(25, 105, 25);" pButton [disabled]="loading">
+            <span
+                *ngIf="loading"
+                class="spinner-border spinner-border-sm"
+            ></span>&nbsp;
+            <span> Activating your account</span>
+        </button>
+    </div>
+
+    <div *ngIf="!loading">
+        <span style="font-size: 17px;" class="p-text-secondary block mb-5">
+            Go to 
+            <a style="text-decoration: none;"
+            href="" onclick="return false" routerLink="/">
+            main page
+            </a>
+        </span>
+    </div>
+
+  </div>

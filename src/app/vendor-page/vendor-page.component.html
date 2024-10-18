@@ -1,0 +1,216 @@
+
+<p-card [header]="this.vendor.companyName" styleClass="container mainCard">
+    <ng-template pTemplate="header">
+        @if (vendorPicture){
+            <img style="max-height: 300px; object-fit:cover; border-radius: 15px;" alt="Card" [src]="vendorPicture" />
+        } @else {
+            <img style="max-height: 300px; object-fit:cover; border-radius: 15px;" alt="Card" src="../../assets/placeholder.png" />
+        }
+    </ng-template>
+
+    <p *ngIf="this.vendor.description">
+        {{this.vendor.description}}
+    </p>
+
+    <p-dropdown *ngIf="selectedAddress"
+        styleClass="selectAddress"
+        (onChange)="updateProducts()"
+        [options]="vendor.userDTO ? this.vendor.userDTO.addresses : []" 
+        [(ngModel)]="selectedAddress" 
+        optionLabel="formatted" 
+        placeholder="No addresses" />
+    <br/>
+    <br/>
+    <div style="display: flex;">
+        <div style="width:95%">
+            <p-button *ngIf="this.vendor.deliveryTime" [rounded]="false" [text]="true" severity="secondary"><i class="pi pi-car"></i>&nbsp;<span style="font-size:13px">{{this.vendor.deliveryTime}}min</span></p-button>
+            <p-button *ngIf="this.vendor.deliveryCost"  [rounded]="false" [text]="true" severity="secondary"><i class="pi pi-dollar"></i>&nbsp;<span style="font-size:13px">{{this.vendor.deliveryCost}}</span></p-button>
+        </div>
+        <div style="text-align: right;display: flex;">
+            <p-button *ngIf="getRole() == 'customer'" icon="pi pi-heart" [rounded]="true" [text]="true" severity="secondary" />
+            <p-button *ngIf="getRole()=='vendor' && vendor.userDTO?.id == getUserId()" (onClick)="showUpdatePage()" icon="pi pi-pen-to-square" [rounded]="true" [text]="true" severity="secondary" />
+            <p-button *ngIf="getRole()=='vendor' && vendor.userDTO?.id == getUserId()" (onClick)="showAddProduct()" icon="pi pi-plus" [rounded]="true" [text]="true" severity="secondary" />
+        </div>
+    </div>
+<!--     
+    <ng-template pTemplate="footer">
+        
+        
+    </ng-template> -->
+</p-card>
+<div class="container" style="max-width: 1343px;" *ngFor="let item of productsWithPictures; let first = first" >
+    <p-card styleClass="card" >
+        <div style="display:flex; margin-left:20px;margin-right:20px">
+            @if(item.imageObjectURL){
+                <img style="object-fit: cover;margin-right:20px; border-radius:15px;width:170px;height:100px" alt="Card" [src]="item.imageObjectURL" />
+            } @else{
+                <img style="object-fit:cover; margin-right:20px; border-radius:15px;width:170px;height:100px" alt="Card" [src]="item.product.pictureBase64" />
+            }
+            <div style="width:78%">
+            <h3>{{ item.product.name }}</h3>
+            <div style="width:90%">
+                <p> {{ item.product.description }} </p>
+            </div>
+            <div *ngIf="getRole()=='vendor' && vendor.userDTO?.id == getUserId()">
+                <a href="" onclick="return false"  (click)="onDeleteProduct(item.product.id)">Remove this product</a>
+            </div>
+                
+            </div>
+            <div style="text-align: right;">
+                <div >
+                    <h2> ${{ item.product.price }}</h2>
+                </div>
+                <p-button icon="pi pi-plus" [rounded]="true" [text]="true" [raised]="true" severity="success" />
+            </div>
+        </div>
+    </p-card>
+</div>
+
+<p-dialog 
+    dismissableMask ="true"
+    [header]="'Page information'" 
+    [modal]="true" 
+    [(visible)]="updatePageVisible" >
+
+    <form #updatePageForm="ngForm" (ngSubmit)="onUpdatePage()">
+        <div class="form-group">
+            <div style="margin-bottom: 10px">
+                <b><label for="companyName" style="padding:5px;font-size:13px">Company name</label></b><br/>
+                <input 
+                    [(ngModel)]="this.editedVendor.companyName"
+                    required
+                    style="height: 33px;" 
+                    pInputText 
+                    name="companyName"
+                    class="form-control"
+                    autocomplete="off" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div style="margin-bottom: 10px">
+                <b><label for="description" style="padding:5px;font-size:13px">Description</label></b><br/>
+                <textarea 
+                    [(ngModel)]="this.editedVendor.description"
+                    cols="30"
+                    class="form-control"
+                    name="description"
+                    pInputTextarea></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <div style="margin-bottom: 10px">
+                <b><label for="name" style="padding:5px;font-size:13px">Delivery time</label></b><br/>
+                <input 
+                    [(ngModel)]="this.editedVendor.deliveryTime"
+                    type="number"
+                    style="height: 33px;" 
+                    pInputText 
+                    name="name"
+                    class="form-control"
+                    autocomplete="off" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div style="margin-bottom: 10px">
+                <b><label for="name" style="padding:5px;font-size:13px">Delivery cost</label></b><br/>
+                <input 
+                    [(ngModel)]="this.editedVendor.deliveryCost"
+                    type="number"
+                    style="height: 33px;" 
+                    pInputText 
+                    name="name"
+                    class="form-control"
+                    autocomplete="off" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div style="margin-bottom: 10px">
+                <b><label style="padding:5px;font-size:13px">Picture</label></b><br/>
+                <app-upload-images [(editedVendor)]="editedVendor"></app-upload-images>
+            </div>
+        </div>
+        <button  Fo
+            [disabled]="!validVendorForm()
+            || updatePageForm.invalid 
+            || loading"
+            type="submit"
+            id="login-button"
+            style="height: 33px;width: fit-content; margin-top: 10px;"
+            pButton 
+            pRipple 
+            class="p-button-secondary">
+            <b>Update page</b>&nbsp;
+            <i *ngIf="loading" class="pi pi-spin pi-spinner" style="font-size: 1rem"></i>
+        </button>
+    </form>
+</p-dialog>
+
+<p-dialog 
+    dismissableMask ="true"
+    [header]="'Product information'" 
+    [modal]="true" 
+    [(visible)]="addProductVisible" >
+
+    <form #addProductForm="ngForm" (ngSubmit)="onAddProduct()">
+        <div class="form-group">
+            <div style="margin-bottom: 10px">
+                <b><label for="name" style="padding:5px;font-size:13px">Name</label></b><br/>
+                <input 
+                    [(ngModel)]="this.product.name"
+                    required
+                    style="height: 33px;" 
+                    pInputText 
+                    name="name"
+                    class="form-control"
+                    autocomplete="off" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div style="margin-bottom: 10px">
+                <b><label for="description" style="padding:5px;font-size:13px">Description</label></b><br/>
+                <textarea 
+                    [(ngModel)]="this.product.description"
+                    cols="30"
+                    class="form-control"
+                    name="description"
+                    pInputTextarea></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <div style="margin-bottom: 10px">
+                <b><label for="price" style="padding:5px;font-size:13px">Price</label></b><br/>
+                <input 
+                    [(ngModel)]="this.product.price"
+                    required
+                    type="number"
+                    style="height: 33px;" 
+                    pInputTextBox
+                    name="price"
+                    class="form-control"
+                    autocomplete="off" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div style="margin-bottom: 10px">
+                <b><label style="padding:5px;font-size:13px">Picture</label></b><br/>
+                <app-upload-images [(product)]="product"></app-upload-images>
+            </div>
+        </div>
+        <button  Fo
+            [disabled]="!product.pictureBase64
+            || !product.pictureName
+            || addProductForm.pristine 
+            || addProductForm.invalid 
+            || loading"
+            type="submit"
+            id="login-button"
+            style="height: 33px;width: fit-content; margin-top: 10px;"
+            pButton 
+            pRipple 
+            class="p-button-secondary">
+            <b>Add product</b>&nbsp;
+            <i *ngIf="loading" class="pi pi-spin pi-spinner" style="font-size: 1rem"></i>
+        </button>
+        
+    </form>
+</p-dialog>

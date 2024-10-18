@@ -1,0 +1,31 @@
+<div style="width: 100%;">
+    <div style="text-align: center;">
+        <a href="" 
+            style="text-decoration: none;font-size: 20px;"
+            (click)="getLocation()" 
+            onclick="return false">
+            <i style="font-size:1rem" *ngIf="locating" class="pi pi-spin pi-spinner"></i>
+            <i style="font-size:1rem" *ngIf="!locating" class="pi pi-compass"></i>
+            Find my location
+        </a>
+    </div>
+    
+    <google-map
+        (mapClick)="mapClicked($event)"
+        width="550" 
+        height="350"
+        [options]="options">
+        @for (marker of markers; track marker) {
+            <map-advanced-marker
+                (mapDragstart)="markerDragStarted($event)"
+                (mapDragend)="markerDragEnded($event)"
+                [gmpDraggable]="marker.draggable"
+                #markerElem="mapAdvancedMarker"
+                [title]="marker.label ? marker.label : ''"
+                [position]="marker.location"
+                (mapClick)="markerClicked($event)"
+            />
+        }
+        <div style="font-size: 12px;">*Click to add an address, hover over marker to see added address</div>
+    </google-map>
+</div>

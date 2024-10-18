@@ -1,0 +1,93 @@
+:host {
+    ::ng-deep .selectButton *{
+        padding-top: 2px;
+        padding-bottom: 2px;
+        padding-left:5px;
+        padding-right: 5px;
+        border: none;
+    }
+
+    ::ng-deep * {
+        box-sizing: border-box;
+    }
+
+    ::ng-deep .p-component, .p-component * {
+        box-sizing: border-box;
+    }
+
+    ::ng-deep .p-component {
+        font-family: var(--font-family);
+        font-feature-settings: var(--font-feature-settings, normal);
+        font-size: 1rem;
+        font-weight: normal;
+    }
+
+    ::ng-deep .p-selectbutton .p-button.p-highlight{
+        margin:0;
+        background: #fffbfb;
+        border-color: #f1f5f9;
+        color: #4b5563;
+    }
+    ::ng-deep .p-selectbutton .p-button {
+        background: #f1f5f9;
+        border: 1px solid #f1f5f9;
+        color: #64748b;
+        transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, outline-color 0.2s;
+    }
+    ::ng-deep .p-button:focus {
+        box-shadow: none;
+    }
+}
+
+:host ::ng-deep .iti__country-list{
+    width:300px;
+    height: 150px;
+}
+
+:host ::ng-deep #country-search-box{
+    height: 33px;
+}
+:host ::ng-deep #country-search-box:focus{
+    outline: none;
+}
+:host ::ng-deep #phoneNumber{
+    height: 33px;
+    width: 100%;
+}
+:host ::ng-deep {
+    .p-scroller-viewport {
+        flex: none;
+    }
+}
+
+#addresses{
+    color: #4b5563;
+    background: #ffffff;
+    padding: 0.75rem 0.75rem;
+    border: 1px solid #d1d5db;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+    appearance: none;
+    border-radius: 6px;
+    max-height: 200px;
+    overflow-y:scroll;
+    margin-top:3px
+}
+
+.rmvAddressBtn:hover{
+    color:#d1d5db;
+    cursor: pointer;
+}
+:host ::ng-deep .showHidePass{
+    height: 33px;
+    width:33px;
+    border: 1px solid #d1d5db;
+    border-left:none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.passInput{
+    height:33px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}

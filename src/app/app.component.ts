@@ -7,4 +7,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'feedmeapp';
+  passResetJwt: string = '';
+
+  onPassResetJwt(event:any){
+    if (event.passResetJwt) 
+      this.passResetJwt = event.passResetJwt;
+  }
 }

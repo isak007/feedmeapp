@@ -1,0 +1,64 @@
+<div [style]="{'textAlign':'center','fontFamily':'forte','paddingTop':'50px','marginBottom':'20px'}">
+    <h1>Tell us what you'd like to eat</h1>
+</div>
+<div [style]="{'textAlign':'center'}">
+    <p-autoComplete [style]="{'margin':'0'}"
+        scrollHeight="470px"
+        [inputStyle]="{'width':'400px'}"
+        placeholder="Ex. chicken soup, cheeseburger..."
+        [(ngModel)]="selectedProduct" 
+        [suggestions]="filteredProducts" 
+        (onSelect)="findVendorPage($event)"
+        (completeMethod)="filterProduct($event)">
+        
+        <ng-template let-item pTemplate="item">
+            <div style="display:flex; height:65px; width:100%" class="flex align-items-left gap-2">
+                <div style="width:30%">
+                    <img 
+                        [src]="item.imageObjectURL" 
+                        style="width: 100px;margin:0" />
+                </div>
+                <div style="width: 50%;text-align: left;">
+                    <b>{{item.product.name}}</b><br/>
+                    <p>{{item.product.description}}</p>
+                </div>
+                <div style="white-space: initial;word-wrap: break-word; width: 20%;text-align: right;vertical-align: middle">
+                    <i>${{item.product.price}}</i>
+                </div>  
+            </div>
+        </ng-template>
+    </p-autoComplete>
+</div>
+
+<div [style]="{'textAlign':'center','fontFamily':'forte','marginTop':'70px'}">
+    <h1>Most recent</h1>
+</div>
+<div class="flex align-items-center justify-content-center">
+    <div [style]="{'overflow-x':'hidden'}" class="grid grid-nogutter">
+        <div id="container" >
+            <span *ngFor="let item of vendorsPage; let first = first"
+                [style]="{'margin':'30px'}" >
+                <a [routerLink]="'vendor/'+item.vendor.userDTO.id" style="text-decoration: none;">
+                    <p-card  [style]="{ width: '280px',maxHeight:'500px' }" styleClass="vendor-card" id="vendor-card" [header]="item.vendor.companyName" >
+                        <ng-template pTemplate="header">
+                            <img alt="Card" [src]="item.imageObjectURL" />
+                        </ng-template>
+                        <p style="font-size:13px;max-height: 100px;overflow: hidden;">
+                            {{item.vendor.description}}
+                        </p>
+                        <div class="flex gap-3 mt-1">
+                            <p-button *ngIf="item.vendor.deliveryTime" [rounded]="false" [text]="true" severity="secondary"><i class="pi pi-car"></i>&nbsp;<span style="font-size:13px">{{item.vendor.deliveryTime}}min</span></p-button>
+                            <p-button *ngIf="item.vendor.deliveryCost"  [rounded]="false" [text]="true" severity="secondary"><i class="pi pi-dollar"></i>&nbsp;<span style="font-size:13px">{{item.vendor.deliveryCost}}</span></p-button>
+                        </div>
+                    </p-card>
+                </a>
+            </span>
+        </div>
+    </div>
+    <div class="flex-1 pageChange">
+        <p-paginator [showPageLinks]="false" previouspagelinkicon="pi pi-verified" pStyleClass="pageChange" styleClass="pageChange"
+        (onPageChange)="onPageChange1($event)" [first]="first1" [rows]="rows1" [totalRecords]="vendorsWithPictures.length" [showFirstLastIcon]="false" />
+    </div>
+</div>
+
+

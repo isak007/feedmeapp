@@ -1,0 +1,62 @@
+
+<div style="width: 500px;">
+    <p-card styleClass="creditCard">
+        <div style="width:100%;display:flex">
+            <h2 style="width: 90%;">Credit Card</h2>
+            <span>
+                <img *ngIf="creditCardType=='discover'" class="creditCardImg" src="../../assets/discover.jpg"/>
+                <img *ngIf="creditCardType=='visa'" class="creditCardImg" src="../../assets/visa.jpg"/>
+                <img *ngIf="creditCardType=='american-express'" class="creditCardImg" src="../../assets/american-express.jpg"/>
+                <img *ngIf="creditCardType=='mastercard'" class="creditCardImg" src="../../assets/mastercard.jpg"/>
+            </span>
+        </div>
+
+    <form
+        #ccForm="ngForm" 
+        [formGroup]="form" 
+        (ngSubmit)="onSubmit(ccForm)"  
+        id="creditCard" 
+        novalidate>
+        <br/>
+    
+        <div>
+            <input (input)="updateCreditCard()" pInputText class="cardInput"
+                [(ngModel)] = "cardNumber"
+                formControlName="creditCard"
+                placeholder="---- ---- ---- ----"
+                id="cc-number" type="tel" autocomplete="cc-number" ccNumber>
+        </div>
+        <div>
+            <input pInputText class="cardInput"
+                [(ngModel)] = "expDate"
+                formControlName="expirationDate"
+                placeholder="-- / --"
+                id="cc-exp-date"  type="tel" autocomplete="cc-exp" ccExp>
+        </div>
+        <div>
+            <input pInputText class="cardInput" maxlength="3"
+                [(ngModel)] = "cvvCode"
+                formControlName="cvc"
+                placeholder="---"
+                id="cc-cvc"  type="tel" autocomplete="off" ccCvc>
+        </div>
+        
+        <div>
+            <button  
+                [disabled]="ccForm.pristine || ccForm.invalid || loading"
+                type="submit"
+                id="login-button"
+                style="height: 33px;width: fit-content;"
+                pButton 
+                pRipple
+                class="p-button-secondary">
+                <b>Save changes</b>&nbsp;
+                <i *ngIf="loading" class="pi pi-spin pi-spinner" style="font-size: 1rem"></i>
+            </button>
+        </div>
+        
+    </form>
+    
+    </p-card>
+</div>
+

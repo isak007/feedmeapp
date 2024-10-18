@@ -1,0 +1,25 @@
+<mat-form-field>
+  <div>
+    <mat-toolbar>
+      <input
+        matInput
+        [value]="
+          selectedFileNames.length
+            ? selectedFileNames.join(', ')
+            : 'Click to add'"/>
+    </mat-toolbar>
+
+    <input
+      type="file"
+      id="fileInput"
+      name="fileInput"
+      accept="image/*"
+      (change)="selectFiles($event)"
+    />
+  </div>
+</mat-form-field>
+<div class="previews">
+  @for (preview of previews; track $index) {
+  <img style="object-fit:cover;border-radius:15px;width:170px;height:100px" [src]="preview" class="preview" />
+  }
+</div>
